@@ -35,7 +35,8 @@ role.onchange = function() {
 
     }
   }
-
+// accordion menus
+// simple game.
   console.log(chosen);
 }
 var val = role.value;
@@ -160,8 +161,6 @@ function change(e) {
 
 // You can't sign up for two events that occur at the same time.
 // A running total of the costs should be displayed after all the checkboxes.
-
-
 function check(x) {
   for (var i = 0; i < checkboxes.length; i++) {
     if (i === x) {
@@ -256,8 +255,35 @@ console.log(bitCoin.innerHTML);
 var creditCardNumber = document.getElementById("cc-num");
 var zipCode = document.getElementById("zip");
 var cvvCode = document.getElementById("cvv");
-var expirationMonth = document.getElementById("exp-month");
-var expirationYear = document.getElementById("exp-year");
+var zipCodeTag = document.getElementById("zip-label");
+var creditCardNumberTag = document.getElementById("cc-num-label");
+var cvvCodeTag = document.getElementById("cvv-label");
+
+
+var nameTag = document.getElementsByTagName("label")[0];
+var emailTag = document.getElementsByTagName("label")[1];
+var jobRoleTag = document.getElementsByTagName("label")[2];
+var tShirtTag = document.getElementsByTagName("legend")[1];
+var tShirtColorTag = document.getElementsByTagName("label")[5];
+var activitiesTag = document.getElementsByTagName("legend")[2];
+var paymentInfoTag = document.getElementsByTagName("legend")[3];
+
+var tagText;
+function addErrorMessage(tag, errorMessage) {
+  if (tagText.indexOf(errorMessage) < 0) {
+    tag.innerHTML += errorMessage;
+  }
+  tag.style.color="red";
+}
+
+function removeErrorMessage(tag) {
+    tag.innerHTML = tagText;
+    tag.style.color="black";
+}
+
+function validateEmail(email) {
+
+}
 
   // Display credit card text fields when selected.
   // Display a message for the Paypal and Bitcoin options.
@@ -267,32 +293,96 @@ submitButton.onclick = function(event) {
   event.preventDefault();
   if (nameField.value === "") {
     console.log("Enter your name ");
+    tagText = nameTag.textContent;
+    addErrorMessage(nameTag, " This is a required field");
+  } else {
+    tagText = "Name: ";
+    removeErrorMessage(nameTag);
   }
 
   if (emailField.value === "") {
     console.log("Enter your email ");
+    tagText = emailTag.textContent;
+    addErrorMessage(emailTag, " This is a required field");
+  } else {
+      var regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+      var tof = regex.test(emailField.value);
+      console.log(tof);
+      if (tof === false) {
+        tagText = "Email:";
+        removeErrorMessage(emailTag);
+        addErrorMessage(emailTag, " Invalid Email | Try something like rtandel124@gmail.com");
+        console.log("bad email");
+      } else {
+        console.log("nice email");
+        tagText = "Email:";
+        removeErrorMessage(emailTag);
+      }
+
   }
+
 
   if (chosen === "Other") {
     if (jobRoleField.value === "") {
       console.log("You chose other, so enter a job role.");
+      tagText = jobRoleTag.textContent;
+      addErrorMessage(jobRoleTag, " When other is selected, this is a required field");
+    } else {
+      tagText = "Job Role"
+      removeErrorMessage(jobRoleTag);
     }
   }
   if (theme === "Select Theme") {
-    console.log("Select a them");
+    console.log("Select a theme");
+    tagText = tShirtTag.textContent;
+    addErrorMessage(tShirtTag, " Select a T-shirt");
+  } else {
+    tagText = "T-Shirt Info ";
+    removeErrorMessage(tShirtTag);
   }
 
   if (counter === 0) {
     console.log("Select an activity.");
+    tagText = activitiesTag.textContent;
+    addErrorMessage(activitiesTag, " You must sign-up for at least one event");
+  } else {
+    tagText = "Register for Activities";
+    removeErrorMessage(activitiesTag);
   }
 
   if (selectedPayment === "select_method") {
     console.log("select a payment option");
+    tagText = paymentInfoTag.textContent;
+    addErrorMessage(paymentInfoTag, " Choose a payment method.");
+  } else {
+    tagText = "Payment Info";
+    removeErrorMessage(paymentInfoTag);
   }
 
   if (selectedPayment === "credit card") {
     if (creditCardNumber.value === "") {
       console.log("Enter your creditcard information.");
+      tagText = creditCardNumberTag.textContent;
+      addErrorMessage(creditCardNumberTag, "");
+    } else {
+      tagText = "Card Number";
+      removeErrorMessage(creditCardNumberTag);
+    }
+    if (cvvCode.value === "") {
+      console.log("Enter your creditcard information.");
+      tagText = cvvCodeTag.textContent;
+      addErrorMessage(cvvCodeTag, "");
+    } else {
+      tagText = "CVV";
+      removeErrorMessage(cvvCodeTag);
+    }
+    if (zipCode.value === "") {
+      console.log("Enter your creditcard information.");
+      tagText = zipCodeTag.textContent;
+      addErrorMessage(zipCodeTag, "");
+    } else {
+      tagText = "Zip Code: ";
+      removeErrorMessage(zipCodeTag);
     }
   }
 };
