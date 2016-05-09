@@ -281,29 +281,29 @@ function removeErrorMessage(tag) {
     tag.style.color="black";
 }
 
-function validateEmail(email) {
-
-}
 
   // Display credit card text fields when selected.
   // Display a message for the Paypal and Bitcoin options.
 var submitButton = document.getElementsByTagName("button")[0];
+var ready = false;
 // Validate all input to make sure it meets the requirements.
 submitButton.onclick = function(event) {
-  event.preventDefault();
   if (nameField.value === "") {
     console.log("Enter your name ");
     tagText = nameTag.textContent;
     addErrorMessage(nameTag, " This is a required field");
+    ready = false;
   } else {
     tagText = "Name: ";
     removeErrorMessage(nameTag);
+    ready = true;
   }
 
   if (emailField.value === "") {
     console.log("Enter your email ");
     tagText = emailTag.textContent;
     addErrorMessage(emailTag, " This is a required field");
+    ready = false;
   } else {
       var regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
       var tof = regex.test(emailField.value);
@@ -313,50 +313,58 @@ submitButton.onclick = function(event) {
         removeErrorMessage(emailTag);
         addErrorMessage(emailTag, " Invalid Email | Try something like rtandel124@gmail.com");
         console.log("bad email");
+        ready = false;
       } else {
         console.log("nice email");
         tagText = "Email:";
         removeErrorMessage(emailTag);
+        ready = true;
       }
-
   }
-
 
   if (chosen === "Other") {
     if (jobRoleField.value === "") {
       console.log("You chose other, so enter a job role.");
       tagText = jobRoleTag.textContent;
       addErrorMessage(jobRoleTag, " When other is selected, this is a required field");
+      ready = false;
     } else {
       tagText = "Job Role"
       removeErrorMessage(jobRoleTag);
+      ready = true;
     }
   }
   if (theme === "Select Theme") {
     console.log("Select a theme");
     tagText = tShirtTag.textContent;
     addErrorMessage(tShirtTag, " Select a T-shirt");
+    ready = false;
   } else {
     tagText = "T-Shirt Info ";
     removeErrorMessage(tShirtTag);
+    ready = true;
   }
 
   if (counter === 0) {
     console.log("Select an activity.");
     tagText = activitiesTag.textContent;
     addErrorMessage(activitiesTag, " You must sign-up for at least one event");
+    ready = false;
   } else {
     tagText = "Register for Activities";
     removeErrorMessage(activitiesTag);
+    ready = true;
   }
 
   if (selectedPayment === "select_method") {
     console.log("select a payment option");
     tagText = paymentInfoTag.textContent;
     addErrorMessage(paymentInfoTag, " Choose a payment method.");
+    ready = false;
   } else {
     tagText = "Payment Info";
     removeErrorMessage(paymentInfoTag);
+    ready = true;
   }
 
   if (selectedPayment === "credit card") {
@@ -364,26 +372,35 @@ submitButton.onclick = function(event) {
       console.log("Enter your creditcard information.");
       tagText = creditCardNumberTag.textContent;
       addErrorMessage(creditCardNumberTag, "");
+      ready = false;
     } else {
       tagText = "Card Number";
       removeErrorMessage(creditCardNumberTag);
+      ready = true;
     }
     if (cvvCode.value === "") {
       console.log("Enter your creditcard information.");
       tagText = cvvCodeTag.textContent;
       addErrorMessage(cvvCodeTag, "");
+      ready = false;
     } else {
       tagText = "CVV";
       removeErrorMessage(cvvCodeTag);
+      ready = true;
     }
     if (zipCode.value === "") {
       console.log("Enter your creditcard information.");
       tagText = zipCodeTag.textContent;
       addErrorMessage(zipCodeTag, "");
+      ready = false;
     } else {
       tagText = "Zip Code: ";
       removeErrorMessage(zipCodeTag);
+      ready = true;
     }
+  }
+  if (!ready) {
+    event.preventDefault();
   }
 };
   // The name and email fields are filled in.
