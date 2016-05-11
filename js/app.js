@@ -2,7 +2,7 @@
 // Solution: Add interactivity to the form using JavaScript.
 
 // The first text field should be selected when the page loads.
-document.getElementById("name").autofocus= true;
+document.getElementById("name").focus();
 
 var nameField = document.getElementById("name");
 var emailField = document.getElementById("mail");
@@ -15,7 +15,7 @@ var firstFieldSet = document.getElementsByTagName("fieldset")[0];   // The first
 var input = document.createElement("input");
 input.setAttribute("class", "other_input");
 input.setAttribute("type", "text");
-input.setAttribute("placeholder", "Job Role...");
+input.setAttribute("placeholder", "Your job role");
 
 var chosen;
 var jobRoleField;
@@ -32,14 +32,10 @@ role.onchange = function() {
     if (jobRoleField) {
         firstFieldSet.removeChild(input);
     } else {
-
     }
   }
-// accordion menus
-// simple game.
-  console.log(chosen);
 }
-var val = role.value;
+
 
 
 
@@ -53,10 +49,12 @@ var message;
     // The color options should be updated.
 // Hides the color options when the design is not selected.
 colorPanel.style.display ="none";
-var theme = design.options[0].text;;
+var theme = design.options[0].text; // The selected theme.
 design.onchange = function() {
   message = "";
   theme = design.options[design.selectedIndex].text;
+  // These three if statements decide what information to display
+  // based on the selected theme.
   if (theme === "Select Theme") {
     colorPanel.style.display ="none";
   }
@@ -82,7 +80,7 @@ var activityRegistration = document.getElementsByClassName("activities")[0];
   // When events are selected,
     // The cost will be added to the running total.
 var total = 0;
-    // Conflicting events will be crossed out.
+// Array of activity objects to compare times and set prices.
 var activities = [
   {
     name: "all",
@@ -140,22 +138,26 @@ for (var i = 0; i < activities.length; i++) {
   checkboxes.push(document.getElementsByName(activities[i].name)[0]);
 }
 
+// sets an event listener to each of the checkboxes.
 for (var i = 0; i < checkboxes.length; i++) {
     var childElement = checkboxes[i];
     childElement.addEventListener('change', change, false);
 }
 
+// When the checkboxes are checked or unchecked,
+// this function is called.
 function change(e) {
   var selected = e.target.name;
   var index;
+  // For loop to figure out which checkbox was checked.
   for (var i = 0; i < checkboxes.length; i++) {
       if (checkboxes[i].name === selected) {
         index = i;
         break;
       }
   }
-  check(index);
-  cost(index);
+  check(index);  // Decides if the event conflicts with another.
+  cost(index);   // Calculates the cost.
 }
 
 
@@ -183,7 +185,7 @@ function check(x) {
 }
 
 var displayTotal = document.createElement("p");
-var counter = 0;
+var counter = 0; // Counter to see how many checkboxes are selected
 function cost(y) {
   if (checkboxes[y].checked) {
     counter++;
@@ -213,21 +215,25 @@ console.log(checkboxes);
 var payment = document.getElementById("payment");
 var paymentField = document.getElementsByTagName("fieldset")[3];
 
+// Choices of payment.
 var creditCard = document.getElementById("credit-card");
 var payPal = paymentField.getElementsByTagName("p")[0];
 var bitCoin = paymentField.getElementsByTagName("p")[1];
 
 // Initially hides all of the payment options.
-creditCard.style.display = "none";
+creditCard.style.display = "block";
 payPal.style.display = "none";
 bitCoin.style.display = "none";
 
+// The selected payment method.
 var selectedPayment = payment.options[0].value;
 
+// When a payment method is selected, the appropriate
+// payment method is displayed.
 payment.onchange = function() {
   selectedPayment = payment.options[payment.selectedIndex].value;
   if (selectedPayment === "select_method") {
-    creditCard.style.display = "none";
+    creditCard.style.display = "block";
     payPal.style.display = "none";
     bitCoin.style.display = "none";
   }
@@ -250,16 +256,7 @@ payment.onchange = function() {
 
 
 
-console.log(bitCoin.innerHTML);
-
-var creditCardNumber = document.getElementById("cc-num");
-var zipCode = document.getElementById("zip");
-var cvvCode = document.getElementById("cvv");
-var zipCodeTag = document.getElementById("zip-label");
-var creditCardNumberTag = document.getElementById("cc-num-label");
-var cvvCodeTag = document.getElementById("cvv-label");
-
-
+// All of the tags for each piece of information
 var nameTag = document.getElementsByTagName("label")[0];
 var emailTag = document.getElementsByTagName("label")[1];
 var jobRoleTag = document.getElementsByTagName("label")[2];
@@ -268,16 +265,29 @@ var tShirtColorTag = document.getElementsByTagName("label")[5];
 var activitiesTag = document.getElementsByTagName("legend")[2];
 var paymentInfoTag = document.getElementsByTagName("legend")[3];
 
-var tagText;
+
+// Tags for the credit card information.
+var creditCardNumber = document.getElementById("cc-num");
+var zipCode = document.getElementById("zip");
+var cvvCode = document.getElementById("cvv");
+var zipCodeTag = document.getElementById("zip-label");
+var creditCardNumberTag = document.getElementById("cc-num-label");
+var cvvCodeTag = document.getElementById("cvv-label");
+
+var tagText; // Used by the function below to set the label on elements.
+// This function adds error messages and makes the text red.
 function addErrorMessage(tag, errorMessage) {
+  // To make sure the error message doesn't already exist.
   if (tagText.indexOf(errorMessage) < 0) {
     tag.innerHTML += errorMessage;
   }
-  tag.style.color="red";
+  tag.style.color="red";  // Makes the text red.
 }
 
+// This function removes the error messages for when
+// the form information is valid.
 function removeErrorMessage(tag) {
-    tag.innerHTML = tagText;
+    tag.innerHTML = tagText; // Changes the tag back to the original
     tag.style.color="black";
 }
 
@@ -286,24 +296,30 @@ function removeErrorMessage(tag) {
   // Display a message for the Paypal and Bitcoin options.
 var submitButton = document.getElementsByTagName("button")[0];
 var ready = false;
+
 // Validate all input to make sure it meets the requirements.
+// If any input is invalid or missing, then stop the
+// form from submitting.
+// The name and email fields are filled in.
+// If other is selected, make sure the text field associated with is it's empty.
+// In the Register for Activities section, make sure at least one activity is selected.
+// A payment option must be selected.
+// Make sure the credit card number, zip code, and CVV code are all valid.
 submitButton.onclick = function(event) {
   if (nameField.value === "") {
     console.log("Enter your name ");
     tagText = nameTag.textContent;
     addErrorMessage(nameTag, " This is a required field");
-    ready = false;
+    event.preventDefault();
   } else {
     tagText = "Name: ";
     removeErrorMessage(nameTag);
-    ready = true;
   }
-
   if (emailField.value === "") {
     console.log("Enter your email ");
     tagText = emailTag.textContent;
     addErrorMessage(emailTag, " This is a required field");
-    ready = false;
+    event.preventDefault();
   } else {
       var regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
       var tof = regex.test(emailField.value);
@@ -313,12 +329,11 @@ submitButton.onclick = function(event) {
         removeErrorMessage(emailTag);
         addErrorMessage(emailTag, " Invalid Email | Try something like rtandel124@gmail.com");
         console.log("bad email");
-        ready = false;
+        event.preventDefault();
       } else {
         console.log("nice email");
         tagText = "Email:";
         removeErrorMessage(emailTag);
-        ready = true;
       }
   }
 
@@ -327,44 +342,40 @@ submitButton.onclick = function(event) {
       console.log("You chose other, so enter a job role.");
       tagText = jobRoleTag.textContent;
       addErrorMessage(jobRoleTag, " When other is selected, this is a required field");
-      ready = false;
+      event.preventDefault();
     } else {
       tagText = "Job Role"
       removeErrorMessage(jobRoleTag);
-      ready = true;
     }
   }
   if (theme === "Select Theme") {
     console.log("Select a theme");
     tagText = tShirtTag.textContent;
     addErrorMessage(tShirtTag, " Select a T-shirt");
-    ready = false;
+    event.preventDefault();
   } else {
     tagText = "T-Shirt Info ";
     removeErrorMessage(tShirtTag);
-    ready = true;
   }
 
   if (counter === 0) {
     console.log("Select an activity.");
     tagText = activitiesTag.textContent;
     addErrorMessage(activitiesTag, " You must sign-up for at least one event");
-    ready = false;
+    event.preventDefault();
   } else {
     tagText = "Register for Activities";
     removeErrorMessage(activitiesTag);
-    ready = true;
   }
 
   if (selectedPayment === "select_method") {
     console.log("select a payment option");
     tagText = paymentInfoTag.textContent;
     addErrorMessage(paymentInfoTag, " Choose a payment method.");
-    ready = false;
+    event.preventDefault();
   } else {
     tagText = "Payment Info";
     removeErrorMessage(paymentInfoTag);
-    ready = true;
   }
 
   if (selectedPayment === "credit card") {
@@ -372,39 +383,28 @@ submitButton.onclick = function(event) {
       console.log("Enter your creditcard information.");
       tagText = creditCardNumberTag.textContent;
       addErrorMessage(creditCardNumberTag, "");
-      ready = false;
+      event.preventDefault();
     } else {
       tagText = "Card Number";
       removeErrorMessage(creditCardNumberTag);
-      ready = true;
     }
     if (cvvCode.value === "") {
       console.log("Enter your creditcard information.");
       tagText = cvvCodeTag.textContent;
       addErrorMessage(cvvCodeTag, "");
-      ready = false;
+      event.preventDefault();
     } else {
       tagText = "CVV";
       removeErrorMessage(cvvCodeTag);
-      ready = true;
     }
     if (zipCode.value === "") {
       console.log("Enter your creditcard information.");
       tagText = zipCodeTag.textContent;
       addErrorMessage(zipCodeTag, "");
-      ready = false;
+      event.preventDefault();
     } else {
       tagText = "Zip Code: ";
       removeErrorMessage(zipCodeTag);
-      ready = true;
     }
   }
-  if (!ready) {
-    event.preventDefault();
-  }
 };
-  // The name and email fields are filled in.
-  // If other is selected, make sure the text field associated with is it's empty.
-  // In the Register for Activities section, make sure at least one activity is selected.
-  // A payment option must be selected.
-  // Make sure the credit card number, zip code, and CVV code are all valid.
