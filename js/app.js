@@ -225,8 +225,8 @@ creditCard.style.display = "block";
 payPal.style.display = "none";
 bitCoin.style.display = "none";
 
-// The selected payment method.
-var selectedPayment = payment.options[0].value;
+// The selected payment method, default value of credit card.
+var selectedPayment = payment.options[1].value;
 
 // When a payment method is selected, the appropriate
 // payment method is displayed.
@@ -305,6 +305,7 @@ var ready = false;
 // In the Register for Activities section, make sure at least one activity is selected.
 // A payment option must be selected.
 // Make sure the credit card number, zip code, and CVV code are all valid.
+
 submitButton.onclick = function(event) {
   if (nameField.value === "") {
     console.log("Enter your name ");
@@ -347,6 +348,9 @@ submitButton.onclick = function(event) {
       tagText = "Job Role"
       removeErrorMessage(jobRoleTag);
     }
+  } else {
+    tagText = "Job Role"
+    removeErrorMessage(jobRoleTag);
   }
   if (theme === "Select Theme") {
     console.log("Select a theme");
@@ -377,7 +381,7 @@ submitButton.onclick = function(event) {
     tagText = "Payment Info";
     removeErrorMessage(paymentInfoTag);
   }
-
+  var regex = /[0-9]|\./;
   if (selectedPayment === "credit card") {
     if (creditCardNumber.value === "") {
       console.log("Enter your creditcard information.");
@@ -385,8 +389,17 @@ submitButton.onclick = function(event) {
       addErrorMessage(creditCardNumberTag, "");
       event.preventDefault();
     } else {
-      tagText = "Card Number";
+      tagText = "Card Number:";
       removeErrorMessage(creditCardNumberTag);
+      var tof = regex.test(creditCardNumber.value);
+      if (tof) {
+        tagText = "Card Number: ";
+        removeErrorMessage(creditCardNumberTag);
+      } else {
+        tagText = creditCardNumberTag.textContent;
+        addErrorMessage(creditCardNumberTag, " This field can only contain numbers.");
+        event.preventDefault();
+      }
     }
     if (cvvCode.value === "") {
       console.log("Enter your creditcard information.");
@@ -394,8 +407,17 @@ submitButton.onclick = function(event) {
       addErrorMessage(cvvCodeTag, "");
       event.preventDefault();
     } else {
-      tagText = "CVV";
+      tagText = "CVV: ";
       removeErrorMessage(cvvCodeTag);
+      var tof = regex.test(cvvCode.value);
+      if (tof) {
+        tagText = "CVV: ";
+        removeErrorMessage(cvvCodeTag);
+      } else {
+        tagText = cvvCodeTag.textContent;
+        addErrorMessage(cvvCodeTag, " This field can only contain numbers.");
+        event.preventDefault();
+      }
     }
     if (zipCode.value === "") {
       console.log("Enter your creditcard information.");
@@ -405,6 +427,15 @@ submitButton.onclick = function(event) {
     } else {
       tagText = "Zip Code: ";
       removeErrorMessage(zipCodeTag);
+      var tof = regex.test(cvvCode.value);
+      if (tof) {
+        tagText = "Zip Code: ";
+        removeErrorMessage(zipCodeTag);
+      } else {
+        tagText = zipCodeTag.textContent;
+        addErrorMessage(zipCodeTag, " This field can only contain numbers.");
+        event.preventDefault();
+      }
     }
   }
 };
